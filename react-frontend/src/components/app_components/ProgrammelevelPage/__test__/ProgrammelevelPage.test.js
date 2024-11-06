@@ -9,14 +9,14 @@ import { Provider } from "react-redux";
 import * as models from "../../../models";
 
 test("renders programmelevel page", async () => {
-    const store = init({ models });
-    render(
-        <Provider store={store}>
-            <MemoryRouter>
-                <ProgrammelevelPage />
-            </MemoryRouter>
-        </Provider>
-    );
-    expect(screen.getByRole("programmelevel-datatable")).toBeInTheDocument();
-    expect(screen.getByRole("programmelevel-add-button")).toBeInTheDocument();
+  const store = init({ models });
+  render(
+    <Provider store={store}>
+      <MemoryRouter>
+        <ProgrammelevelPage />
+      </MemoryRouter>
+    </Provider>,
+  );
+  expect(screen.getByRole("programmelevel-datatable")).toBeInTheDocument();
+  expect(screen.getByRole("programmelevel-add-button")).toBeInTheDocument();
 });

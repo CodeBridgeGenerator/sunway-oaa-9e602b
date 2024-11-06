@@ -1,192 +1,117 @@
 import React, { useState, useEffect } from "react";
-import { classNames } from "primereact/utils";
 import { connect } from "react-redux";
-import RecentComp from "./RecentFavDashComp/RecentComp";
-import PinnedItems from "./RecentFavDashComp/FavComponent";
-import { TitleDash } from "./TitleDash";
-import EditDashComp from "./EditDashComp";
-import TotalComponent from "./RecentFavDashComp/TotalComponent";
-import StaffInfo from "../../assets/media/StaffInfo.png";
-import Mail from "../../assets/media/Mail.png";
-import Employees from "../../assets/media/Employees.png";
-import Generate from "../../assets/media/GenerateReports.png";
-import LineChart from "./Charts/LineChart";
-import BarChart from "./Charts/BarChart";
-import TeamMembers from "./TabView/TeamMembers";
-import Drag from "../../assets/media/Drag.png";
-import ChartPopup from "./PopUpComp/ChartPopup";
-import MultipleChart from "./TabView/MultipleCharts";
+import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 import ProjectLayout from "../Layouts/ProjectLayout";
 
-export const AdminControl = (props) => {
-  const [isEdit, setIsEdit] = useState(false);
+export const LandingPage = (props) => {
   const [ActiveTab, setActiveTab] = useState(0);
-  const [showCard, setShowCard] = useState(false);
+  const navigate = useNavigate(); // Initialize the navigate function
 
   useEffect(() => {
-    get();
-  });
+    fetchCacheData();
+  }, []);
 
-  const get = async () => {
-    const cache = await props.get();
-    console.log(props.cache);
+  const fetchCacheData = async () => {
+    await props.get();
   };
 
-  const handlePopUp = () => {
-    setShowCard(!showCard);
-  };
+  // Dummy recent items and pinned items for courses
+  const recentItems = props.cache.pastTabsAry?.map((i) => ({
+    text: i.label,
+    subtext: "Recently Viewed Course",
+    src: i.src,
+  }));
 
-  // const recentItems = [
-  //   { text: "Staff Info", subtext: "Notification", src: StaffInfo },
-  //   { text: "DynaLoader", subtext: "User Management", src: Mail },
-  //   { text: "Job Ques", subtext: "Reports", src: Employees },
-  // ];
-
-  const recentItems = props.cache.pastTabsAry?.map((i) => {
-    return {
-      text: i.label,
-      subtext: "Notification",
-      src: i.src,
-    };
-  });
-
-  // const pinnedItems = [
-  //   { text: "Generate Templates", subtext: "Reports", src: Generate },
-  // ];
-
-  const pinnedItems = props.cache.pastTabsAry?.map((i) => {
-    return {
-      text: i.label,
-      subtext: "Messaging",
-      src: i.icon,
-    };
-  });
-
-  const teamMembers = [
-    {
-      email: "nur.fatin@example.com",
-      verificationCode: "1234",
-      resendCode: "3",
-      name: "Nur Fatin Nabilah",
-      status: "Active",
-    },
-    {
-      email: "john.doe@example.com",
-      verificationCode: "5678",
-      resendCode: "1",
-      name: "John Doe",
-      status: "Pending set up",
-    },
-    {
-      email: "jane.smith@example.com",
-      verificationCode: "9101",
-      resendCode: "1",
-      name: "Jane Smith",
-      status: "Deactivated",
-    },
-    {
-      email: "alice.johnson@example.com",
-      verificationCode: "1121",
-      resendCode: "2",
-      name: "Alice Johnson",
-      status: "Active",
-    },
-  ];
-
-  const tabs = [
-    { label: "To User", src: Drag },
-    { label: "Content", src: Drag },
-    { label: "Read", src: Drag },
-  ];
+  const pinnedItems = props.cache.pastTabsAry?.map((i) => ({
+    text: i.label,
+    subtext: "Pinned Course",
+    src: i.icon,
+  }));
 
   return (
     <ProjectLayout>
-    <div className="p-2 md:p-4">
-      {/* Title and Edit section */}
-      <div className="mb-2 flex justify-content-between align-items-center">
-        <TitleDash user={props.user} />
-        <EditDashComp isEdit={isEdit} setIsEdit={setIsEdit} />
-      </div>
+      <div className="p-4">
+        {/* Welcome Banner */}
+        <div className="surface-border border-round surface-card mb-4 p-4 text-center">
+          <h1>Welcome, {props.user.name}!</h1>
+          <p>We're glad to have you in the Online Course Application Portal.</p>
+        </div>
 
-      <div className="surface-border border-round surface-card">
-        <div className="grid">
-          {/* Recent Component */}
-          <div className="col-12 md:col-4 mb-3">
-            <RecentComp
-              title={"Recent"}
-              isEdit={isEdit}
-              recentItems={recentItems}
-            />
-          </div>
+        {/* Introduction Section */}
+        <div className="surface-border border-round surface-card mt-3 p-4">
+          <h2>Explore Our Courses</h2>
+          <p>
+            Here you can browse, apply to, and manage your courses with ease.
+            Below are some quick links to your recently viewed and pinned
+            courses.
+          </p>
+        </div>
 
-          {/* Pinned Items Component */}
-          <div className="col-12 md:col-4 mb-3">
-            <PinnedItems
-              Pinned={"Pinned Items"}
-              isEdit={isEdit}
-              pinnedItems={pinnedItems}
-            />
-          </div>
+        {/* Recent Courses and Pinned Courses Section */}
+        <div className="surface-border border-round surface-card mt-3 p-4">
+          <div className="grid">
+            {/* Recent Courses */}
+            <div className="col-12 md:col-6 mb-3">
+              <h3>Recently Viewed Courses</h3>
+              <ul>
+                {recentItems?.map((item, index) => (
+                  <li key={index}>
+                    <img src={item.src} alt={item.text} width={20} />{" "}
+                    {item.text} - {item.subtext}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Total Component */}
-          <div className="col-12 md:col-4">
-            <TotalComponent
-              TotalComp={"Workforce Summary"}
-              isEdit={isEdit}
-              total={250}
-            />
+            {/* Pinned Courses */}
+            <div className="col-12 md:col-6 mb-3">
+              <h3>Pinned Courses</h3>
+              <ul>
+                {pinnedItems?.map((item, index) => (
+                  <li key={index}>
+                    <img src={item.src} alt={item.text} width={20} />{" "}
+                    {item.text} - {item.subtext}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Charts Section with integrated ChartPopup */}
-      <div>
-        <div className="mb-3">
-          <ChartPopup isEdit={isEdit} setIsEdit={setIsEdit} />
+        {/* Button Section */}
+        <div className="mt-4 flex justify-content-center">
+          <button
+            className="p-button p-button-rounded p-button-outlined mr-2"
+            onClick={() => navigate("/coloredpills")}
+          >
+            Option A
+          </button>
+          <button
+            className="p-button p-button-rounded p-button-outlined mr-2"
+            onClick={() => navigate("/cardwithsidenav")}
+          >
+            Option B
+          </button>
+          <button
+            className="p-button p-button-rounded p-button-outlined"
+            onClick={() => navigate("/commandcentre")}
+          >
+            Option C
+          </button>
         </div>
-        {showCard && <PopupCard />}
-        <div className="grid">
-          {/* Line Chart */}
-
-          {/* <div className="col-12 md:col-8 mb-3 relative">
-            <LineChart name={"Sales Orders"} isEdit={isEdit} />
-          </div> */}
-
-          {/* Bar Chart */}
-          {/* <div className="col-12 md:col-4 mb-3">
-            <BarChart total={"Total Users"} isEdit={isEdit} />
-          </div> */}
-          <div className="col-12 md:col-8 mb-3 relative">
-            <MultipleChart />
-          </div>
-        </div>
       </div>
-
-      {/* Team Members Section */}
-      <div>
-        <TeamMembers
-          teamMembers={teamMembers}
-          tabs={tabs}
-          ActiveTab={ActiveTab}
-          setActiveTab={setActiveTab}
-          isEdit={isEdit}
-        />
-      </div>
-    </div>
     </ProjectLayout>
   );
 };
 
 const mapState = (state) => {
-  const { user, isLoggedIn } = state.auth;
+  const { user } = state.auth;
   const { cache } = state.cache;
-  return { user, isLoggedIn, cache };
+  return { user, cache };
 };
+
 const mapDispatch = (dispatch) => ({
-  alert: (data) => dispatch.toast.alert(data),
   get: () => dispatch.cache.get(),
 });
 
-export default connect(mapState, mapDispatch)(AdminControl);
-
-// export default DataManagement;
+export default connect(mapState, mapDispatch)(LandingPage);

@@ -1,12 +1,12 @@
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import React, { useState, useRef } from 'react';
-import _ from 'lodash';
-import { Button } from 'primereact/button';
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import React, { useState, useRef } from "react";
+import _ from "lodash";
+import { Button } from "primereact/button";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import UploadService from "../../../services/UploadService";
-import { InputText } from 'primereact/inputtext';
+import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
 import { MultiSelect } from "primereact/multiselect";
 import DownloadCSV from "../../../utils/DownloadCSV";
@@ -17,43 +17,105 @@ import CopyIcon from "../../../assets/media/Clipboard.png";
 import DuplicateIcon from "../../../assets/media/Duplicate.png";
 import DeleteIcon from "../../../assets/media/Trash.png";
 
-const ContactInformationDataTable = ({ items, fields, onEditRow, onRowDelete, onRowClick, searchDialog, setSearchDialog,   showUpload, setShowUpload,
-    showFilter, setShowFilter,
-    showColumns, setShowColumns, onClickSaveFilteredfields ,
-    selectedFilterFields, setSelectedFilterFields,
-    selectedHideFields, setSelectedHideFields, onClickSaveHiddenfields, loading, user,   selectedDelete,
-  setSelectedDelete, onCreateResult}) => {
-    const dt = useRef(null);
-    const urlParams = useParams();
-    const [globalFilter, setGlobalFilter] = useState('');
+const ContactInformationDataTable = ({
+  items,
+  fields,
+  onEditRow,
+  onRowDelete,
+  onRowClick,
+  searchDialog,
+  setSearchDialog,
+  showUpload,
+  setShowUpload,
+  showFilter,
+  setShowFilter,
+  showColumns,
+  setShowColumns,
+  onClickSaveFilteredfields,
+  selectedFilterFields,
+  setSelectedFilterFields,
+  selectedHideFields,
+  setSelectedHideFields,
+  onClickSaveHiddenfields,
+  loading,
+  user,
+  selectedDelete,
+  setSelectedDelete,
+  onCreateResult,
+}) => {
+  const dt = useRef(null);
+  const urlParams = useParams();
+  const [globalFilter, setGlobalFilter] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [data, setData] = useState([]);
 
-const dropdownTemplate0 = (rowData, { rowIndex }) => <p >{rowData.name?.name}</p>
-const pTemplate1 = (rowData, { rowIndex }) => <p >{rowData.fullCorrespondenceAddress}</p>
-const pTemplate2 = (rowData, { rowIndex }) => <p >{rowData.city}</p>
-const pTemplate3 = (rowData, { rowIndex }) => <p >{rowData.postalCode}</p>
-const pTemplate4 = (rowData, { rowIndex }) => <p >{rowData.state}</p>
-const pTemplate5 = (rowData, { rowIndex }) => <p >{rowData.country}</p>
-const pTemplate6 = (rowData, { rowIndex }) => <p >{rowData.studentMobileNumber}</p>
-const pTemplate7 = (rowData, { rowIndex }) => <p >{rowData.homeContactNumber}</p>
-const pTemplate8 = (rowData, { rowIndex }) => <p >{rowData.studentemail}</p>
-const pTemplate9 = (rowData, { rowIndex }) => <p >{rowData.permanentAddress}</p>
-const pTemplate10 = (rowData, { rowIndex }) => <p >{rowData.parentGuardianName}</p>
-const dropdownTemplate11 = (rowData, { rowIndex }) => <p >{rowData.relationship?.name}</p>
-const pTemplate12 = (rowData, { rowIndex }) => <p >{rowData.parentGuardianNumber}</p>
-const pTemplate13 = (rowData, { rowIndex }) => <p >{rowData.parentGuardianEmail}</p>
-const pTemplate14 = (rowData, { rowIndex }) => <p >{rowData.parentGuardianOfficeNumber}</p>
-const pTemplate15 = (rowData, { rowIndex }) => <p >{rowData.monthlyHouseholdIncome}</p>
-const pTemplate16 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactName}</p>
-const pTemplate17 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactNumber}</p>
-const dropdownTemplate18 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactRelationship?.name}</p>
-const pTemplate19 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactEmail}</p>
-    const editTemplate = (rowData, { rowIndex }) => <Button onClick={() => onEditRow(rowData, rowIndex)} icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`} className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`} />;
-    const deleteTemplate = (rowData, { rowIndex }) => <Button onClick={() => onRowDelete(rowData._id)} icon="pi pi-times" className="p-button-rounded p-button-danger p-button-text" />;
-    
-      const checkboxTemplate = (rowData) => (
+  const dropdownTemplate0 = (rowData, { rowIndex }) => (
+    <p>{rowData.name?.name}</p>
+  );
+  const pTemplate1 = (rowData, { rowIndex }) => (
+    <p>{rowData.fullCorrespondenceAddress}</p>
+  );
+  const pTemplate2 = (rowData, { rowIndex }) => <p>{rowData.city}</p>;
+  const pTemplate3 = (rowData, { rowIndex }) => <p>{rowData.postalCode}</p>;
+  const pTemplate4 = (rowData, { rowIndex }) => <p>{rowData.state}</p>;
+  const pTemplate5 = (rowData, { rowIndex }) => <p>{rowData.country}</p>;
+  const pTemplate6 = (rowData, { rowIndex }) => (
+    <p>{rowData.studentMobileNumber}</p>
+  );
+  const pTemplate7 = (rowData, { rowIndex }) => (
+    <p>{rowData.homeContactNumber}</p>
+  );
+  const pTemplate8 = (rowData, { rowIndex }) => <p>{rowData.studentemail}</p>;
+  const pTemplate9 = (rowData, { rowIndex }) => (
+    <p>{rowData.permanentAddress}</p>
+  );
+  const pTemplate10 = (rowData, { rowIndex }) => (
+    <p>{rowData.parentGuardianName}</p>
+  );
+  const dropdownTemplate11 = (rowData, { rowIndex }) => (
+    <p>{rowData.relationship?.name}</p>
+  );
+  const pTemplate12 = (rowData, { rowIndex }) => (
+    <p>{rowData.parentGuardianNumber}</p>
+  );
+  const pTemplate13 = (rowData, { rowIndex }) => (
+    <p>{rowData.parentGuardianEmail}</p>
+  );
+  const pTemplate14 = (rowData, { rowIndex }) => (
+    <p>{rowData.parentGuardianOfficeNumber}</p>
+  );
+  const pTemplate15 = (rowData, { rowIndex }) => (
+    <p>{rowData.monthlyHouseholdIncome}</p>
+  );
+  const pTemplate16 = (rowData, { rowIndex }) => (
+    <p>{rowData.emergencyContactName}</p>
+  );
+  const pTemplate17 = (rowData, { rowIndex }) => (
+    <p>{rowData.emergencyContactNumber}</p>
+  );
+  const dropdownTemplate18 = (rowData, { rowIndex }) => (
+    <p>{rowData.emergencyContactRelationship?.name}</p>
+  );
+  const pTemplate19 = (rowData, { rowIndex }) => (
+    <p>{rowData.emergencyContactEmail}</p>
+  );
+  const editTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onEditRow(rowData, rowIndex)}
+      icon={`pi ${rowData.isEdit ? "pi-check" : "pi-pencil"}`}
+      className={`p-button-rounded p-button-text ${rowData.isEdit ? "p-button-success" : "p-button-warning"}`}
+    />
+  );
+  const deleteTemplate = (rowData, { rowIndex }) => (
+    <Button
+      onClick={() => onRowDelete(rowData._id)}
+      icon="pi pi-times"
+      className="p-button-rounded p-button-danger p-button-text"
+    />
+  );
+
+  const checkboxTemplate = (rowData) => (
     <Checkbox
       checked={selectedItems.some((item) => item._id === rowData._id)}
       onChange={(e) => {
@@ -94,7 +156,7 @@ const pTemplate19 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactEmai
       console.error("Failed to delete selected records", error);
     }
   };
-    
+
   const handleMessage = () => {
     setShowDialog(true); // Open the dialog
   };
@@ -103,10 +165,10 @@ const pTemplate19 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactEmai
     setShowDialog(false); // Close the dialog
   };
 
-    return (
-        <>
-        <DataTable 
-           value={items}
+  return (
+    <>
+      <DataTable
+        value={items}
         ref={dt}
         removableSort
         onRowClick={onRowClick}
@@ -124,37 +186,192 @@ const pTemplate19 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactEmai
         selection={selectedItems}
         onSelectionChange={(e) => setSelectedItems(e.value)}
         onCreateResult={onCreateResult}
-        >
-                <Column
+      >
+        <Column
           selectionMode="multiple"
           headerStyle={{ width: "3rem" }}
           body={checkboxTemplate}
         />
-<Column field="name" header="Name" body={dropdownTemplate0} filter={selectedFilterFields.includes("name")} hidden={selectedHideFields?.includes("name")}  style={{ minWidth: "8rem" }} />
-<Column field="fullCorrespondenceAddress" header="Full Correspondence Address" body={pTemplate1} filter={selectedFilterFields.includes("fullCorrespondenceAddress")} hidden={selectedHideFields?.includes("fullCorrespondenceAddress")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="city" header="City" body={pTemplate2} filter={selectedFilterFields.includes("city")} hidden={selectedHideFields?.includes("city")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="postalCode" header="Postal Code" body={pTemplate3} filter={selectedFilterFields.includes("postalCode")} hidden={selectedHideFields?.includes("postalCode")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="state" header="State" body={pTemplate4} filter={selectedFilterFields.includes("state")} hidden={selectedHideFields?.includes("state")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="country" header="Country" body={pTemplate5} filter={selectedFilterFields.includes("country")} hidden={selectedHideFields?.includes("country")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="studentMobileNumber" header="Student Mobile Number" body={pTemplate6} filter={selectedFilterFields.includes("studentMobileNumber")} hidden={selectedHideFields?.includes("studentMobileNumber")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="homeContactNumber" header="Home Contact Number" body={pTemplate7} filter={selectedFilterFields.includes("homeContactNumber")} hidden={selectedHideFields?.includes("homeContactNumber")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="studentemail" header="Student Email" body={pTemplate8} filter={selectedFilterFields.includes("studentemail")} hidden={selectedHideFields?.includes("studentemail")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="permanentAddress" header="Permanent Address" body={pTemplate9} filter={selectedFilterFields.includes("permanentAddress")} hidden={selectedHideFields?.includes("permanentAddress")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="parentGuardianName" header="Parent Guardian Name" body={pTemplate10} filter={selectedFilterFields.includes("parentGuardianName")} hidden={selectedHideFields?.includes("parentGuardianName")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="relationship" header="Relationship" body={dropdownTemplate11} filter={selectedFilterFields.includes("relationship")} hidden={selectedHideFields?.includes("relationship")}  style={{ minWidth: "8rem" }} />
-<Column field="parentGuardianNumber" header="Parent Guardian Number" body={pTemplate12} filter={selectedFilterFields.includes("parentGuardianNumber")} hidden={selectedHideFields?.includes("parentGuardianNumber")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="parentGuardianEmail" header="Parent Guardian Email" body={pTemplate13} filter={selectedFilterFields.includes("parentGuardianEmail")} hidden={selectedHideFields?.includes("parentGuardianEmail")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="parentGuardianOfficeNumber" header="Parent Guardian Office Number" body={pTemplate14} filter={selectedFilterFields.includes("parentGuardianOfficeNumber")} hidden={selectedHideFields?.includes("parentGuardianOfficeNumber")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="monthlyHouseholdIncome" header="Monthly Household Income" body={pTemplate15} filter={selectedFilterFields.includes("monthlyHouseholdIncome")} hidden={selectedHideFields?.includes("monthlyHouseholdIncome")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="emergencyContactName" header="Emergency Contact Name" body={pTemplate16} filter={selectedFilterFields.includes("emergencyContactName")} hidden={selectedHideFields?.includes("emergencyContactName")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="emergencyContactNumber" header="Emergency Contact Number" body={pTemplate17} filter={selectedFilterFields.includes("emergencyContactNumber")} hidden={selectedHideFields?.includes("emergencyContactNumber")}  sortable style={{ minWidth: "8rem" }} />
-<Column field="emergencyContactRelationship" header="Emergency Contact Relationship" body={dropdownTemplate18} filter={selectedFilterFields.includes("emergencyContactRelationship")} hidden={selectedHideFields?.includes("emergencyContactRelationship")}  style={{ minWidth: "8rem" }} />
-<Column field="emergencyContactEmail" header="Emergency Contact Email" body={pTemplate19} filter={selectedFilterFields.includes("emergencyContactEmail")} hidden={selectedHideFields?.includes("emergencyContactEmail")}  sortable style={{ minWidth: "8rem" }} />
-            <Column header="Edit" body={editTemplate} />
-            <Column header="Delete" body={deleteTemplate} />
-            
-        </DataTable>
-
+        <Column
+          field="name"
+          header="Name"
+          body={dropdownTemplate0}
+          filter={selectedFilterFields.includes("name")}
+          hidden={selectedHideFields?.includes("name")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="fullCorrespondenceAddress"
+          header="Full Correspondence Address"
+          body={pTemplate1}
+          filter={selectedFilterFields.includes("fullCorrespondenceAddress")}
+          hidden={selectedHideFields?.includes("fullCorrespondenceAddress")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="city"
+          header="City"
+          body={pTemplate2}
+          filter={selectedFilterFields.includes("city")}
+          hidden={selectedHideFields?.includes("city")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="postalCode"
+          header="Postal Code"
+          body={pTemplate3}
+          filter={selectedFilterFields.includes("postalCode")}
+          hidden={selectedHideFields?.includes("postalCode")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="state"
+          header="State"
+          body={pTemplate4}
+          filter={selectedFilterFields.includes("state")}
+          hidden={selectedHideFields?.includes("state")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="country"
+          header="Country"
+          body={pTemplate5}
+          filter={selectedFilterFields.includes("country")}
+          hidden={selectedHideFields?.includes("country")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="studentMobileNumber"
+          header="Student Mobile Number"
+          body={pTemplate6}
+          filter={selectedFilterFields.includes("studentMobileNumber")}
+          hidden={selectedHideFields?.includes("studentMobileNumber")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="homeContactNumber"
+          header="Home Contact Number"
+          body={pTemplate7}
+          filter={selectedFilterFields.includes("homeContactNumber")}
+          hidden={selectedHideFields?.includes("homeContactNumber")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="studentemail"
+          header="Student Email"
+          body={pTemplate8}
+          filter={selectedFilterFields.includes("studentemail")}
+          hidden={selectedHideFields?.includes("studentemail")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="permanentAddress"
+          header="Permanent Address"
+          body={pTemplate9}
+          filter={selectedFilterFields.includes("permanentAddress")}
+          hidden={selectedHideFields?.includes("permanentAddress")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="parentGuardianName"
+          header="Parent Guardian Name"
+          body={pTemplate10}
+          filter={selectedFilterFields.includes("parentGuardianName")}
+          hidden={selectedHideFields?.includes("parentGuardianName")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="relationship"
+          header="Relationship"
+          body={dropdownTemplate11}
+          filter={selectedFilterFields.includes("relationship")}
+          hidden={selectedHideFields?.includes("relationship")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="parentGuardianNumber"
+          header="Parent Guardian Number"
+          body={pTemplate12}
+          filter={selectedFilterFields.includes("parentGuardianNumber")}
+          hidden={selectedHideFields?.includes("parentGuardianNumber")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="parentGuardianEmail"
+          header="Parent Guardian Email"
+          body={pTemplate13}
+          filter={selectedFilterFields.includes("parentGuardianEmail")}
+          hidden={selectedHideFields?.includes("parentGuardianEmail")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="parentGuardianOfficeNumber"
+          header="Parent Guardian Office Number"
+          body={pTemplate14}
+          filter={selectedFilterFields.includes("parentGuardianOfficeNumber")}
+          hidden={selectedHideFields?.includes("parentGuardianOfficeNumber")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="monthlyHouseholdIncome"
+          header="Monthly Household Income"
+          body={pTemplate15}
+          filter={selectedFilterFields.includes("monthlyHouseholdIncome")}
+          hidden={selectedHideFields?.includes("monthlyHouseholdIncome")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="emergencyContactName"
+          header="Emergency Contact Name"
+          body={pTemplate16}
+          filter={selectedFilterFields.includes("emergencyContactName")}
+          hidden={selectedHideFields?.includes("emergencyContactName")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="emergencyContactNumber"
+          header="Emergency Contact Number"
+          body={pTemplate17}
+          filter={selectedFilterFields.includes("emergencyContactNumber")}
+          hidden={selectedHideFields?.includes("emergencyContactNumber")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="emergencyContactRelationship"
+          header="Emergency Contact Relationship"
+          body={dropdownTemplate18}
+          filter={selectedFilterFields.includes("emergencyContactRelationship")}
+          hidden={selectedHideFields?.includes("emergencyContactRelationship")}
+          style={{ minWidth: "8rem" }}
+        />
+        <Column
+          field="emergencyContactEmail"
+          header="Emergency Contact Email"
+          body={pTemplate19}
+          filter={selectedFilterFields.includes("emergencyContactEmail")}
+          hidden={selectedHideFields?.includes("emergencyContactEmail")}
+          sortable
+          style={{ minWidth: "8rem" }}
+        />
+        <Column header="Edit" body={editTemplate} />
+        <Column header="Delete" body={deleteTemplate} />
+      </DataTable>
 
       {selectedItems.length > 0 ? (
         <div
@@ -330,20 +547,28 @@ const pTemplate19 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactEmai
         </div>
       ) : null}
 
-
-        <Dialog header="Upload ContactInformation Data" visible={showUpload} onHide={() => setShowUpload(false)}>
-        <UploadService 
-          user={user} 
-          serviceName="contactInformation"            
+      <Dialog
+        header="Upload ContactInformation Data"
+        visible={showUpload}
+        onHide={() => setShowUpload(false)}
+      >
+        <UploadService
+          user={user}
+          serviceName="contactInformation"
           onUploadComplete={() => {
             setShowUpload(false); // Close the dialog after upload
-          }}/>
+          }}
+        />
       </Dialog>
 
-      <Dialog header="Search ContactInformation" visible={searchDialog} onHide={() => setSearchDialog(false)}>
-      Search
-    </Dialog>
-    <Dialog
+      <Dialog
+        header="Search ContactInformation"
+        visible={searchDialog}
+        onHide={() => setSearchDialog(false)}
+      >
+        Search
+      </Dialog>
+      <Dialog
         header="Filter Users"
         visible={showFilter}
         onHide={() => setShowFilter(false)}
@@ -368,7 +593,7 @@ const pTemplate19 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactEmai
             console.log(selectedFilterFields);
             onClickSaveFilteredfields(selectedFilterFields);
             setSelectedFilterFields(selectedFilterFields);
-            setShowFilter(false)
+            setShowFilter(false);
           }}
         ></Button>
       </Dialog>
@@ -398,12 +623,12 @@ const pTemplate19 = (rowData, { rowIndex }) => <p >{rowData.emergencyContactEmai
             console.log(selectedHideFields);
             onClickSaveHiddenfields(selectedHideFields);
             setSelectedHideFields(selectedHideFields);
-            setShowColumns(false)
+            setShowColumns(false);
           }}
         ></Button>
       </Dialog>
-        </>
-    );
+    </>
+  );
 };
 
 export default ContactInformationDataTable;

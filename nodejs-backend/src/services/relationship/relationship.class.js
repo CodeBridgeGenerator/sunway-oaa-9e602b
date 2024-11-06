@@ -1,5 +1,3 @@
-const { Service } = require('feathers-mongoose');
+const { Service } = require("feathers-mongoose");
 
-exports.Relationship = class Relationship extends Service {
-  
-};
+exports.Relationship = class Relationship extends Service {};

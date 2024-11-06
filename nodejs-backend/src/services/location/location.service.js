@@ -1,28 +1,28 @@
-const { Location } = require('./location.class');
-const createModel = require('../../models/location.model');
-const hooks = require('./location.hooks');
+const { Location } = require("./location.class");
+const createModel = require("../../models/location.model");
+const hooks = require("./location.hooks");
 
 module.exports = function (app) {
   const options = {
     Model: createModel(app),
-    paginate: app.get('paginate'),
+    paginate: app.get("paginate"),
     whitelist: ["$populate"],
     multi: ["create"],
   };
 
   // Initialize our service with any options it requires
-  app.use('/location', new Location(options, app));
+  app.use("/location", new Location(options, app));
 
   // Get our initialized service so that we can register hooks
-  const service = app.service('location');
+  const service = app.service("location");
 
-  // Get the schema of the collections 
+  // Get the schema of the collections
   app.get("/locationSchema", function (request, response) {
     const schema = createModel(app).schema.tree;
-    const result = Object.keys(schema).map(key => {
+    const result = Object.keys(schema).map((key) => {
       return {
         field: key,
-        properties: schema[key]
+        properties: schema[key],
       };
     });
     return response.status(200).json(result);

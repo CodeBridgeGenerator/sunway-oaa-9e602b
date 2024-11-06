@@ -92,6 +92,9 @@ import DashboardDataManagement from '../components/Dashboard/DashboardDataManage
 import DashboardErrors from '../components/Dashboard/DashboardErrors';
 import DashboardMessaging from '../components/Dashboard/DashboardMessaging';
 import DashboardUserManagement from '../components/Dashboard/DashboardUserManagement';
+import ColoredPills from '../components/Dashboard/ColoredPills';
+import CardwithSideNav from '../components/Dashboard/cardwithsidenav';
+import CommandCentre from '../components/Dashboard/commandcentre';
 
 import SingleCoursesPage from "../components/app_components/CoursesPage/SingleCoursesPage";
 import CourseProjectLayoutPage from "../components/app_components/CoursesPage/CourseProjectLayoutPage";
@@ -140,6 +143,10 @@ const MyRouter = (props) => {
             <Route element={<ProtectedRoute redirectPath={'/login'} />}>
                 <Route path="/project" exact element={<DashboardAdminControl />} />
                 <Route path="/account" exact element={<Account />} />
+                <Route path="/coloredpills" exact element={<ColoredPills />} />
+                <Route path="/cardwithsidenav" exact element={<CardwithSideNav />} />
+                <Route path="/commandcentre" exact element={<CommandCentre />} />
+
                 // user details
                 <Route path="/users/:singleUsersId" exact element={<SingleUsersPage />} />
                 <Route path="/users" exact element={<UserProjectLayoutPage />} />
